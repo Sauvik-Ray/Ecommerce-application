@@ -62,18 +62,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-<<<<<<< HEAD
 
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>3.2.1</version>
         </dependency>
-
-=======
->>>>>>> 3af3c01487177931ae4e23f75c4ec97c2d2c8d7d
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -82,5 +77,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
