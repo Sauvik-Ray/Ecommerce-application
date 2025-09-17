@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService{
             product.setImage("default.png");
             product.setCategory(category);
             double specialPrice = product.getPrice() - (product.getDiscount() * 0.01) * product.getPrice();
-            product.setPrice(specialPrice);
+            product.setSpecialPrice(specialPrice);
             Product savedProduct = productRepository.save(product);
             return modelMapper.map(savedProduct, ProductDTO.class);
         }
