@@ -4,7 +4,6 @@ import com.ecommerce.project.Repository.CartItemRepository;
 import com.ecommerce.project.Repository.CartRepository;
 import com.ecommerce.project.Repository.ProductRepository;
 import com.ecommerce.project.exceptions.ApiException;
-import com.ecommerce.project.exceptions.ApiException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.CartItem;
@@ -134,6 +133,7 @@ public class CartServiceImpl implements CartService{
         Long cartId = userCart.getCartId();
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(()->new ResourceNotFoundException("Cart", "cartId", cartId));
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
 
@@ -203,6 +203,29 @@ public class CartServiceImpl implements CartService{
         cartItemRepository.deleteCartItemByProductIdAndCartId(cartId, productId);
 
         return "Product " + cartItem.getProduct().getProductName() + " removed";
+    }
+
+    @Override
+    public void updateProductInCart(Long cartId, Long productId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(()->new ResourceNotFoundException("Cart", "cartId", cartId));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
+
+        CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId, productId);
+
+        if(cartItem==null){
+            throw  new ApiException("Product " + product.getProductName()+ " not available in the cart!!!");
+        }
+
+        double cartPrice = cart.getTotalPrice() - (cartItem.getProductPrice()*cartItem.getQuantity());
+
+        cartItem.setProductPrice(product.getSpecialPrice());
+
+        cart.setTotalPrice(cartPrice + (cartItem.getProductPrice() * cartItem.getQuantity()));
+
+        cartItem = cartItemRepository.save(cartItem);
     }
 
     private Cart createCart() {
